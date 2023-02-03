@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package = "github.com/soroushj/grpcmock/example/notes";
+
+package notes;
+
+service Notes {
+  rpc GetNote (GetNoteRequest) returns (GetNoteResponse) {}
+}
+
+message Note {
+  string id = 1;
+  string text = 2;
+}
+
+message GetNoteRequest {
+  string id = 1;
+}
+
+message GetNoteResponse {
+  Note note = 1;
+}
