@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bufio"
+	"context"
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/soroushj/grpcmock/example/notes"
 	"github.com/soroushj/grpcmock/example/notescli"
@@ -13,23 +16,23 @@ import (
 
 func main() {
 	flag.Usage = func() {
-		fmt.Fprintln(os.Stderr, "Usage: notescli server_addr note_id")
+		fmt.Fprintln(os.Stderr, "Usage: notescli server_addr")
 	}
 	flag.Parse()
-	if flag.NArg() < 2 {
+	if flag.NArg() < 1 {
 		flag.Usage()
 		os.Exit(1)
 	}
 	addr := flag.Arg(0)
-	id := flag.Arg(1)
-	err := printNoteText(addr, id)
+	ctx := context.Background()
+	err := run(ctx, addr)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
 
-func printNoteText(addr, id string) error {
+func run(ctx context.Context, addr string) error {
 	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return err
@@ -37,10 +40,23 @@ func printNoteText(addr, id string) error {
 	defer conn.Close()
 	client := notes.NewNotesClient(conn)
 	nc := notescli.New(client)
-	text, err := nc.GetNoteText(id)
-	if err != nil {
-		return err
+	r := bufio.NewReader(os.Stdin)
+	fmt.Println("enter \\q to quit")
+	for {
+		fmt.Print("\nid=")
+		id, err := r.ReadString('\n')
+		if err != nil {
+			return err
+		}
+		id = strings.TrimSpace(id)
+		if id == "\\q" {
+			return nil
+		}
+		text, err := nc.GetNoteText(ctx, id)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println(text)
+		}
 	}
-	fmt.Println(text)
-	return nil
 }

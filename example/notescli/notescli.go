@@ -19,8 +19,8 @@ func New(client notes.NotesClient) *NotesCLI {
 	return &NotesCLI{client}
 }
 
-func (nc *NotesCLI) GetNoteText(id string) (string, error) {
-	resp, err := nc.client.GetNote(context.Background(), &notes.GetNoteRequest{Id: id})
+func (nc *NotesCLI) GetNoteText(ctx context.Context, id string) (string, error) {
+	resp, err := nc.client.GetNote(ctx, &notes.GetNoteRequest{Id: id})
 	if err != nil {
 		return "", err
 	}

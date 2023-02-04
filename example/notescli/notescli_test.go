@@ -59,6 +59,7 @@ func TestGetNoteText(t *testing.T) {
 	client := notes.NewNotesClient(conn)
 	// Create a NotesCLI to be tested
 	nc := notescli.New(client)
+	ctx := context.Background()
 	// Set a mock handler for the GetNote method on the Notes server
 	mock.SetHandler("GetNote", func(ctx context.Context, req interface{}) (interface{}, error) {
 		r := req.(*notes.GetNoteRequest)
@@ -84,7 +85,7 @@ func TestGetNoteText(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			text, err := nc.GetNoteText(tc.id)
+			text, err := nc.GetNoteText(ctx, tc.id)
 			if text != tc.text {
 				t.Errorf("text: got %q want %q", text, tc.text)
 			}
@@ -98,7 +99,7 @@ func TestGetNoteText(t *testing.T) {
 		Resp: &notes.GetNoteResponse{},
 	})
 	t.Run("Bad response", func(t *testing.T) {
-		text, err := nc.GetNoteText("3")
+		text, err := nc.GetNoteText(ctx, "3")
 		if text != "" {
 			t.Errorf("text: got %q want %q", text, "")
 		}
