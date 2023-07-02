@@ -1,4 +1,4 @@
-package notescli_test
+package integration_test
 
 import (
 	"context"
@@ -49,13 +49,14 @@ func TestMain(m *testing.M) {
 }
 
 func TestGetNoteText(t *testing.T) {
-	// Create a Notes client
+	// Connect to the mock Notes server
 	addr := fmt.Sprintf("localhost:%v", port)
 	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		t.Fatalf("failed to dial %v: %v", addr, err)
 	}
 	defer conn.Close()
+	// Create a Notes client
 	client := notes.NewNotesClient(conn)
 	// Create a NotesCLI to be tested
 	nc := notescli.New(client)
