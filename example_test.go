@@ -13,25 +13,22 @@ import (
 )
 
 func Example() {
-	// Create a GRPCMock
+	// Create a gRPC server using a grpcmock interceptor
 	mock := grpcmock.New()
-
-	// Create a gRPC server using the mock interceptor
 	server := grpc.NewServer(grpc.UnaryInterceptor(mock.UnaryServerInterceptor()))
 
 	// Register an implementation of your server; the example Notes server in this case.
 	// This typically should be the generated Unimplemented implementation.
 	notes.RegisterNotesServer(server, &notes.UnimplementedNotesServer{})
 
-	// Run the server
-	addr := ":5050"
-	lis, err := net.Listen("tcp", addr)
+	// Run the server on an available port
+	lis, err := net.Listen("tcp", ":0")
 	if err != nil {
-		log.Fatalf("failed to listen at %v: %v", addr, err)
+		log.Fatalf("listen: %v", err)
 	}
 	go func() {
 		if err := server.Serve(lis); err != nil {
-			log.Fatalf("failed to serve at %v: %v", addr, err)
+			log.Fatalf("serve at %v: %v", lis.Addr(), err)
 		}
 	}()
 
@@ -50,7 +47,7 @@ func Example() {
 		Resp: &notes.GetNoteResponse{
 			Note: &notes.Note{
 				Id:   "1",
-				Text: "test",
+				Text: "a",
 			},
 		},
 	})
@@ -63,7 +60,7 @@ func Example() {
 			return &notes.GetNoteResponse{
 				Note: &notes.Note{
 					Id:   "1",
-					Text: "test",
+					Text: "a",
 				},
 			}, nil
 		}
