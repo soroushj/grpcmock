@@ -6,7 +6,7 @@
 
 See [docs and examples on pkg.go.dev](https://pkg.go.dev/github.com/soroushj/grpcmock).
 
-See the [example](./example) directory for a complete example.
+See the [example](./example/) directory for a complete example.
 
 ## Usage
 
