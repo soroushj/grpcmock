@@ -32,9 +32,9 @@ func TestNotesCLI(t *testing.T) {
 		}
 	}()
 	// Connect to the mock Notes server
-	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(lis.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		t.Fatalf("dial %v: %v", lis.Addr(), err)
+		t.Fatalf("connect to %v: %v", lis.Addr(), err)
 	}
 	defer conn.Close()
 	// Create a Notes client
