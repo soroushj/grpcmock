@@ -1,6 +1,6 @@
 # Notes CLI: An example for grpcmock
 
-This example demonstrates how package grpcmock can be used for writing integration tests.
+This example demonstrates how grpcmock can be used for writing integration tests.
 
 In this example, we define a *Notes* gRPC service for retrieving notes and implement a CLI client for this service.
 We will use the grpcmock package to write integration tests for the CLI.
@@ -14,7 +14,6 @@ We will use the grpcmock package to write integration tests for the CLI.
 - [`notescli/`](./notescli/) implements a CLI client for the *Notes* server.
   - [`notescli/notescli.go`](./notescli/notescli.go) implements a `NotesCLI` type that takes a *Notes* client as a dependency.
   - [`notescli/integration/integration_test.go`](./notescli/integration/integration_test.go) is the **interesting part.**
-    It demonstrates how package grpcmock can be used for writing integration tests.
     In this test, first we create a mock *Notes* server using grpcmock, then use the mock server to create a real *Notes* client, and finally use this client to create a `NotesCLI`.
 - [`notescli/cmd/notescli/main.go`](./notescli/cmd/notescli/main.go) uses `NotesCLI` to implement a CLI program.
   You don't need to read this one to understand the example.
