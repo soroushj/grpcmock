@@ -27,6 +27,7 @@ func Example() {
 	// Create a gRPC server using a grpcmock interceptor
 	mock := grpcmock.New()
 	server := grpc.NewServer(grpc.UnaryInterceptor(mock.UnaryServerInterceptor()))
+	defer server.Stop()
 
 	// Register an implementation of your server; the example Notes server in this case.
 	// This typically should be the generated Unimplemented implementation.
@@ -84,8 +85,5 @@ func Example() {
 
 	// You can also remove any response or handler for all methods
 	mock.Clear()
-
-	// Stop the server
-	server.Stop()
 }
 ```
