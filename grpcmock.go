@@ -15,7 +15,7 @@ import (
 
 // UnaryResponse represents values returned by a unary RPC.
 type UnaryResponse struct {
-	Resp interface{}
+	Resp any
 	Err  error
 }
 
@@ -75,7 +75,7 @@ func (gm *GRPCMock) Clear() {
 // using mock responses or handlers. If no mock response or handler is set for a method,
 // the registered handler will be used.
 func (gm *GRPCMock) UnaryServerInterceptor() grpc.UnaryServerInterceptor {
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+	return func(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
 		// Extract the short method name
 		n := strings.LastIndex(info.FullMethod, "/")
 		method := info.FullMethod[n+1:]

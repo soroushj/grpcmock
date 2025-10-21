@@ -54,7 +54,7 @@ func Example() {
 
 	// If you need something more than a simple response, you can set a handler.
 	// After this, any call to GetNote will be handled using the function below.
-	mock.SetHandler("GetNote", func(ctx context.Context, req interface{}) (interface{}, error) {
+	mock.SetHandler("GetNote", func(ctx context.Context, req any) (any, error) {
 		r := req.(*notes.GetNoteRequest)
 		if r.Id == "1" {
 			return &notes.GetNoteResponse{

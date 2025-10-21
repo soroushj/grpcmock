@@ -44,7 +44,7 @@ func TestNotesCLI(t *testing.T) {
 	ctx := context.Background()
 	t.Run("GetNoteText", func(t *testing.T) {
 		// Set a mock handler for the GetNote method on the Notes server
-		mock.SetHandler("GetNote", func(ctx context.Context, req interface{}) (interface{}, error) {
+		mock.SetHandler("GetNote", func(ctx context.Context, req any) (any, error) {
 			r := req.(*notes.GetNoteRequest)
 			if r.Id == "1" {
 				return &notes.GetNoteResponse{
