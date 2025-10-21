@@ -43,17 +43,17 @@ func Example() {
 		}
 	}()
 
-	// At this point, if you call any method from the running server, you will get an Unimplemented error.
+	// At this point, all methods on the server will return an Unimplemented error.
 	// Let's change this behavior for the GetNote method of this server.
 
 	// This is how you can set a mock response for a method; an error in this case.
-	// After this, you will get a NotFound error from GetNote instead of an Unimplemented error.
+	// After this, the GetNote method will return a NotFound error.
 	mock.SetResponse("GetNote", &grpcmock.UnaryResponse{
 		Err: status.Error(codes.NotFound, "note not found"),
 	})
 
 	// Similarly, you can set a non-error response.
-	// After this, you will get the response below from GetNote instead of an error.
+	// After this, the GetNote method will return the response below.
 	mock.SetResponse("GetNote", &grpcmock.UnaryResponse{
 		Resp: &notes.GetNoteResponse{
 			Note: &notes.Note{
@@ -79,7 +79,7 @@ func Example() {
 	})
 
 	// You can remove any previously-set response or handler for a method.
-	// After this, GetNote will return an Unimplemented error.
+	// After this, the GetNote method will return an Unimplemented error.
 	mock.Unset("GetNote")
 
 	// You can also remove any response or handler for all methods
