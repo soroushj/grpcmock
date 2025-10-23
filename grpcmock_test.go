@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
 	"testing"
 
 	"github.com/soroushj/grpcmock"
@@ -139,4 +140,26 @@ func TestClear(t *testing.T) {
 			t.Errorf("err: got %v want %v", err, errReal)
 		}
 	})
+}
+
+func TestConcurrency(t *testing.T) {
+	mock := grpcmock.New()
+	interceptor := mock.UnaryServerInterceptor()
+	info := &grpc.UnaryServerInfo{FullMethod: "/pkg.Svc/M"}
+	n := 1000
+	var wg sync.WaitGroup
+	wg.Add(n)
+	for range n {
+		go func() {
+			defer wg.Done()
+			for range 10 {
+				interceptor(context.Background(), nil, info, func(ctx context.Context, req any) (any, error) { return 0, nil })
+				mock.SetResponse("M", &grpcmock.UnaryResponse{Resp: 1, Err: nil})
+				mock.SetHandler("M", func(ctx context.Context, req any) (any, error) { return 2, nil })
+				mock.Unset("M")
+				mock.Clear()
+			}
+		}()
+	}
+	wg.Wait()
 }
