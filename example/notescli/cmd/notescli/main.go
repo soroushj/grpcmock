@@ -19,7 +19,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, "Usage: notescli server_addr")
 	}
 	flag.Parse()
-	if flag.NArg() < 1 {
+	if flag.NArg() != 1 {
 		flag.Usage()
 		os.Exit(1)
 	}

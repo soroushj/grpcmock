@@ -1,4 +1,4 @@
-package integration_test
+package notescli_test
 
 import (
 	"context"

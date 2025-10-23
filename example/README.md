@@ -13,11 +13,10 @@ We will use the grpcmock package to write integration tests for the CLI.
   - The `notes/*.pb.go` files are automatically generated and define the Go types for the *Notes* service.
 - [`notescli/`](./notescli/) implements a CLI client for the *Notes* server.
   - [`notescli/notescli.go`](./notescli/notescli.go) implements a `NotesCLI` type that takes a *Notes* client as a dependency.
-  - [`notescli/integration/integration_test.go`](./notescli/integration/integration_test.go) is the **interesting part.**
-    In this test, first we create a mock *Notes* server using grpcmock, then use the mock server to create a real *Notes* client, and finally use this client to create a `NotesCLI`.
-- [`notescli/cmd/notescli/main.go`](./notescli/cmd/notescli/main.go) uses `NotesCLI` to implement a CLI program.
-  You don't need to read this one to understand the example.
-  But you can use it as a client if you want to play around with a mock *Notes* server.
+  - [`notescli/notescli_test.go`](./notescli/notescli_test.go) is the **interesting part.**
+    In this test, first we create a mock *Notes* server using grpcmock, then use the mock server to create a real *Notes* client, and finally use this client to create a `NotesCLI` to test.
+  - [`notescli/cmd/notescli/main.go`](./notescli/cmd/notescli/main.go) uses `NotesCLI` to implement a CLI program.
+    You don't need to read this file to understand the example.
 
 ## Go generate
 
